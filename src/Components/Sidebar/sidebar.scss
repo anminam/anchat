@@ -1,0 +1,49 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  flex: 0.35; // 퍼센트로 하는거 같음 1 == 100%
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    border-right: 1px solid lightgray;
+
+    &__right {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-width: 10vw;
+
+      button {
+        // margin-right: 2vw;
+        font-size: 24px;
+      }
+    }
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    height: 40px;
+    padding: 10px;
+
+    &__container {
+      display: flex;
+      align-items: center;
+
+      > input {
+        border: none;
+        outline-width: 0;
+      }
+    }
+  }
+
+  &__chats {
+    flex: 1;
+    background-color: white;
+    overflow: scroll;
+    overflow-x: hidden;
+  }
+}
