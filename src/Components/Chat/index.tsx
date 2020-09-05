@@ -1,13 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import "./chat.scss";
 import { Avatar, IconButton } from "@material-ui/core";
+import axios from "../../core/axios";
 
 import ChatIcon from "@material-ui/icons/Chat";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import SearchIcon from "@material-ui/icons/Search";
 import EmojiEmotions from "@material-ui/icons/EmojiEmotions";
+import { IMessage } from "../../Interfaces/IMessage";
 
-const Chat = () => {
+interface IProps {
+  messages: IMessage[];
+}
+const Chat = ({ messages }: IProps) => {
+  const [input, setInput] = useState<string>("");
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    axios.post("/api/messages/new", {
+      message: input,
+      name: "Anminam",
+      timestamp: new Date().toString,
+      received: false,
+    });
+
+    setInput("");
+  };
+
   return (
     <section className="chat">
       <header className="chat__header">
@@ -29,26 +49,29 @@ const Chat = () => {
         </div>
       </header>
       <div className="chat__body">
-        <p className="chat__body__message">
-          <span className="chat__name">안미남</span>
-          안녕 훈민아
-          <span className="chat__time">{new Date().getTime()}</span>
-        </p>
-        <p className="chat__body__message chat_body_reciever">
-          <span className="chat__name">안미남</span>
-          안녕 훈민아
-          <span className="chat__time">{new Date().getTime()}</span>
-        </p>
-        <p className="chat__body__message">
-          <span className="chat__name">안미남</span>
-          안녕 훈민아
-          <span className="chat__time">{new Date().getTime()}</span>
-        </p>
+        {messages.map((item, i) => (
+          <p
+            key={i}
+            className={`chat__body__message ${
+              item.received && "chat_body_reciever"
+            }`}
+          >
+            <span className="chat__name">{item.name}</span>
+            {item.message}
+            <span className="chat__time">{item.timestamp}</span>
+          </p>
+        ))}
       </div>
       <footer className="chat__footer">
         <EmojiEmotions />
-        <form>
-          <input type="text" placeholder="입력해주세요.." />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="입력해주세요.."
+          />
+          {/* <button type="submit">Send a Message</button> */}
         </form>
       </footer>
     </section>
